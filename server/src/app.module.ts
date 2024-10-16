@@ -4,8 +4,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CurrencyModule } from './currency/currency.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { PrismaModule } from 'nestjs-prisma';
 @Module({
   imports: [
+    PrismaModule,
+
     ConfigModule.forRoot({
       isGlobal: true,
     }),

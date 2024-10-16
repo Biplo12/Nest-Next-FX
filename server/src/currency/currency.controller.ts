@@ -1,9 +1,7 @@
-import { Controller, Get, Post, Body, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('currency')
-@UseInterceptors(CacheInterceptor)
 export class CurrencyController {
   constructor(private currencyService: CurrencyService) {}
 

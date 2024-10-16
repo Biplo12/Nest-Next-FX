@@ -3,13 +3,15 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { CacheManagerStore } from 'cache-manager';
+import { Cache } from 'cache-manager';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class CurrencyService {
   constructor(
     private httpService: HttpService,
-    @Inject(CACHE_MANAGER) private cacheManager: CacheManagerStore,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private prismaService: PrismaService,
     private configService: ConfigService,
   ) {}
 
@@ -17,7 +19,7 @@ export class CurrencyService {
     const cachedRate = await this.cacheManager.get('EUR_PLN_RATE');
 
     if (cachedRate !== undefined) {
-      return cachedRate;
+      return cachedRate as number;
     }
 
     const apiUrl = this.configService.get<string>('API_URL');
@@ -44,8 +46,14 @@ export class CurrencyService {
     const amountPLN = amountEUR * rate;
     const timestamp = new Date();
 
-    // Here you would typically save the transaction to a database
-    // For this example, we'll just return the transaction details
+    await this.prismaService.transaction.create({
+      data: {
+        amountEUR,
+        amountPLN,
+        rate,
+        timestamp,
+      },
+    });
 
     return {
       amountEUR,
