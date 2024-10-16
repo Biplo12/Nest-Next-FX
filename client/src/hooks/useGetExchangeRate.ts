@@ -8,7 +8,7 @@ const useGetExchangeRate = () => {
   const handleGetExchangeRate = async () => {
     try {
       setIsLoading(true);
-      const res = await request.get("/currency/rate");
+      const res = await request.get("/api/currency/exchange-rate");
       setExchangeRate(res.data?.rate || 0);
     } catch (error) {
       console.error(error);

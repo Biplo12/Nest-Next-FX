@@ -1,30 +1,41 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRightLeft, Loader2 } from "lucide-react";
-
+import { ArrowRightLeft } from "lucide-react";
+import { useSimulateTransaction } from "@/hooks/useSimulateTransaction";
+import Spinner from "@/components/common/spinner";
+import { toast } from "sonner";
 interface CurrencyConverterProps {
-  exchangeRate: number | null;
   isLoading: boolean;
-  onConvert: (amount: string) => void;
+  setPlnAmount: (amount: string) => void;
 }
 
 const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
-  exchangeRate,
   isLoading,
-  onConvert,
+  setPlnAmount,
 }): JSX.Element => {
+  const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [eurAmount, setEurAmount] = useState<string>("");
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    if (exchangeRate && eurAmount) {
-      const pln = (parseFloat(eurAmount) * exchangeRate).toFixed(2);
-      onConvert(pln);
+  const { handleSimulateTransaction } = useSimulateTransaction();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      if (eurAmount) {
+        setIsSimulating(true);
+        const transaction = await handleSimulateTransaction(
+          parseFloat(eurAmount)
+        );
+
+        setPlnAmount(transaction.amountPLN.toString());
+        toast.success("Transaction simulated successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSimulating(false);
     }
-    setIsSubmitting(false);
   };
 
   return (
@@ -42,6 +53,7 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
           placeholder="Enter amount in EUR"
           value={eurAmount}
           onChange={(e) => setEurAmount(e.target.value)}
+          disabled={isSimulating || isLoading}
           required
           min="0"
           step="0.01"
@@ -50,14 +62,16 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
       <Button
         type="submit"
         className="w-full"
-        disabled={isSubmitting || isLoading}
+        disabled={isSimulating || isLoading}
       >
-        {isSubmitting ? (
-          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+        {isSimulating ? (
+          <Spinner />
         ) : (
-          <ArrowRightLeft className="h-4 w-4 mr-2" />
+          <>
+            <ArrowRightLeft className="h-4 w-4 mr-2" />
+            <span>Convert to PLN</span>
+          </>
         )}
-        Convert to PLN
       </Button>
     </form>
   );

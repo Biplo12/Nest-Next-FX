@@ -36,11 +36,7 @@ const CurrencyExchangeCard: React.FC = (): JSX.Element => {
           isLoading={isLoading}
           exchangeRate={exchangeRate}
         />
-        <CurrencyConverter
-          exchangeRate={exchangeRate}
-          isLoading={isLoading}
-          onConvert={setPlnAmount}
-        />
+        <CurrencyConverter isLoading={isLoading} setPlnAmount={setPlnAmount} />
       </CardContent>
       {plnAmount && <ConversionResult plnAmount={plnAmount} />}
     </Card>

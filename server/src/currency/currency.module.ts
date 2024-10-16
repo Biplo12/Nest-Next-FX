@@ -5,7 +5,7 @@ import { CurrencyController } from './currency.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { PrismaModule } from 'nestjs-prisma';
 
-const CACHE_TTL = 60000; // 1 minute
+const CACHE_TTL = 60; // 1 minute in seconds (cache-manager default in v4 - seconds. v5 - milliseconds)
 
 @Module({
   imports: [

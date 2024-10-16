@@ -11,7 +11,9 @@ const ConversionResult: React.FC<ConversionResultProps> = ({
     <CardFooter>
       <div className="w-full text-center">
         <p className="text-lg font-semibold">Equivalent Amount</p>
-        <p className="text-3xl font-bold text-green-600">{plnAmount} PLN</p>
+        <p className="text-3xl font-bold text-green-600">
+          {parseFloat(plnAmount)?.toFixed(2) ?? 0} PLN
+        </p>
       </div>
     </CardFooter>
   );
