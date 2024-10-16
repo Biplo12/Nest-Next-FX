@@ -17,7 +17,7 @@ const ExchangeRateDisplay: React.FC<ExchangeRateDisplayProps> = ({
     );
   }
 
-  if (!exchangeRate) {
+  if (!exchangeRate && !isLoading) {
     return (
       <p className="text-center text-red-500 pt-4">
         Failed to load exchange rate
@@ -28,7 +28,7 @@ const ExchangeRateDisplay: React.FC<ExchangeRateDisplayProps> = ({
   return (
     <div className="text-center pt-4">
       <p className="text-3xl font-bold text-gray-300">
-        1 EUR = {exchangeRate.toFixed(3)} PLN
+        1 EUR = {exchangeRate?.toFixed(3)} PLN
       </p>
     </div>
   );

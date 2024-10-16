@@ -9,20 +9,16 @@ import {
 import ExchangeRateDisplay from "./Partials/exchange-rate-display";
 import CurrencyConverter from "./Partials/currency-converter";
 import ConversionResult from "./Partials/conversion-result";
+import useGetExchangeRate from "@/hooks/useGetExchangeRate";
 
 const CurrencyExchangeCard: React.FC = (): JSX.Element => {
-  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [plnAmount, setPlnAmount] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchExchangeRate = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setExchangeRate(4.31);
-      setIsLoading(false);
-    };
+  const { handleGetExchangeRate, exchangeRate, isLoading } =
+    useGetExchangeRate();
 
-    fetchExchangeRate();
+  useEffect(() => {
+    handleGetExchangeRate();
   }, []);
 
   return (

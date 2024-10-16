@@ -30,9 +30,9 @@ export class CurrencyService {
         headers: { 'x-api-key': apiKey },
       }),
     );
-
-    const rate = response.data.rate;
+    const rate = response.data.exchange_rate;
     await this.cacheManager.set('EUR_PLN_RATE', rate, 60000);
+
     return rate;
   }
 

@@ -5,13 +5,14 @@ import { CurrencyService } from './currency.service';
 export class CurrencyController {
   constructor(private currencyService: CurrencyService) {}
 
-  @Get('rate')
+  @Get('rate') // GET /currency/rate
   async getExchangeRate() {
     const rate = await this.currencyService.getExchangeRate();
+
     return { rate };
   }
 
-  @Post('exchange')
+  @Post('exchange') // POST /currency/exchange
   async simulateTransaction(@Body('amount') amount: number) {
     return this.currencyService.simulateTransaction(amount);
   }
